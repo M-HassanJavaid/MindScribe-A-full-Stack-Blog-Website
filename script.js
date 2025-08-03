@@ -140,7 +140,7 @@ async function verifyEmail() {
     try {
         showFlexElem(loaderContainer)
         await sendEmailVerification(auth.currentUser, {
-            url: 'http://127.0.0.1:5500/'
+            url: 'https://mindscribeblog.netlify.app/'
         })
         showAlert("Verification email sent. Please check your inbox or spam box.");
     } catch (error) {
