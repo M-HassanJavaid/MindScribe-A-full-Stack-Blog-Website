@@ -16,21 +16,9 @@ import {
     setDoc,
     getDoc,
     getDocs,
-    updateDoc,
     deleteDoc,
     query,
     where,
-    orderBy,
-    limit,
-    startAt,
-    startAfter,
-    endAt,
-    endBefore,
-    onSnapshot,
-    serverTimestamp,
-    increment,
-    arrayUnion,
-    arrayRemove
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const quill = new Quill('#blog-input', {
