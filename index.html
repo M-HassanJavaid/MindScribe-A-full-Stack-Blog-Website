@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindScribe – Scribing ideas from the mind</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <!-- fontwesome cdn    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Quill stylesheet -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js" defer></script>
+
+    <!-- local stylesheet     -->
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" type="module" defer></script>
+
+</head>
+
+<body>
+    <nav>
+        <h1 id="logo">MindScribe</h1>
+        <ul>
+            <li><a href="#our-story">Our Story</a></li>
+            <li class="write-blog-btn">Write your own blog</li>
+            <li class="register-btn">Register Yourself</li>
+            <li class="login-btn">Login</li>
+            <li class="logout-btn">Logout</li>
+            <li id="view-my-blogs">My Blogs</li>
+            <li id="phone-Menu-bar"><i class="fa-solid fa-bars"></i></li>
+        </ul>
+    </nav>
+    <section id="hero-section">
+        <div id="hero-child-1">
+            <h1 id="hero-text">Share your Ideas <br>Read other Ideas</h1>
+            <button class="btn" id="Start-Writing-main-btn">Start Writing</button>
+            <button class="btn"><a href="#blog-section">Read other Blogs</a></button>
+        </div>
+        <div id="hero-child-2">
+            <img src="assets/logo.png" alt="MindScribe" id="logo">
+        </div>
+    </section>
+    <section id="our-story">
+        <h1>Our Story – Fueling Voices, One Blog at a Time</h1>
+        <p>In a world flooded with noise, we created this space to celebrate clarity, creativity, and authentic human
+            voices. Our blog isn't just a collection of articles — it’s a community built by writers, thinkers,
+            dreamers, and storytellers from all walks of life.</p>
+        <p>What started as a passion project quickly became a growing platform where individuals could share ideas,
+            spark discussions, and connect over shared experiences. Whether you're here to learn, express, or simply
+            browse, you're part of something meaningful.</p>
+        <p>Every blog post you read here represents someone’s thoughts, time, and truth — from tutorials and tech to
+            personal growth, travel stories, and everything in between.</p>
+        <p> We believe everyone has a story to tell. This is ours.</p>
+        <p>And now, we invite you to tell yours.</p>
+    </section>
+    <div class="search-bar">
+        <input type="text" placeholder="Search for your favourite article..." id="public-search-bar">
+    </div>
+    <section id="blog-section">
+
+    </section>
+    <div id="form-container">
+        <i class="fa-solid fa-xmark"></i>
+        <form>
+            <input type="text" class="full-name" placeholder="Enter your full name">
+            <input type="email" class="email" placeholder="Enter your email" autocomplete="username">
+            <input type="password" class="password" placeholder="Enter your passowrd" autocomplete="current-password">
+            <p class="loginAndSignupSwitcher">Already have an account? <span>Login Now</span></p>
+            <button class="formBtn">Register Now</button>
+            <span id="hideOrShowPassowrd">
+               <i class="fa-solid fa-eye"></i>
+               <i class="fa-solid fa-eye-slash"></i>
+            </span>
+        </form>
+    </div>
+    <div class="alert-box">
+        <div class="alert-message">
+            This is a professional alert message.
+        </div>
+        <button class="ok-button">OK</button>
+    </div>
+    <div id="call-to-verify-email-container">
+        <h1>Verify your email to continue.</h1>
+        <button class="btn" id="get-verify-link-btn">Get verfication link</button>
+        <button class="btn logout-btn">Get Logout</button>
+    </div>
+    <div id="Blog-input-container">
+        <div id="blog-input-btn-container">
+            <button class="btn blog-input-btn" id="Blog-publish-btn">Publish Blog</button>
+            <buton class="btn" id="close-blog-input">Cancel</buton>
+            <button class="btn" id="save-blog-draft-btn">Save as draft</button>
+        </div>
+        <input type="text" id="Blog-title-input" placeholder="Write title..">
+        <textarea id="Blog-description-input" placeholder="Write description..."></textarea>
+        <label id="cover-image-container" for="blog-image-input">
+            <input type="file" id="blog-image-input" accept=".png,.jpg,.jpeg">
+            <span>Click here to upload a cover image</span>
+            <img src="" id="blog-img-to-show" alt="Image failed to load">
+            <label id="change-image" for="blog-image-input">Change Image</label>
+        </label>
+
+        <div id="blog-input"></div>
+    </div>
+    <div id="loader-container">
+        <div id="loader"></div>
+    </div>
+    <section id="my-blogs">
+
+        <button class="btn" id="back-from-admin-blog-page-btn">Back To Home</button>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search for your favourite article..." id="admin-search-bar">
+        </div>
+
+        <div id="admin-blog-container">
+
+        </div>
+
+
+    </section>
+
+    <section class="blog-page">
+        <button class="btn" id="back-from-blog-page">Back to Home</button>
+        <h1 class="blog-title">Mastering Vanilla JavaScript Routing</h1>
+        <img src="https://res.cloudinary.com/dxdijw7zr/image/upload/v1753795435/c4qpuexf3wm3otzcfgqn.png"
+            alt="Blog Cover" class="blog-cover" />
+        <article class="blog-content ql-editor blog-HTML">
+
+        </article>
+        <div class="Like-blog-container">
+            <button class="like-btn give-like">
+                <i class="fa-solid fa-thumbs-up give-like"></i> Like <span class="like-count give-like">0</span>
+                <div class="like-btn-loader-container">
+                    <div class="like-btn-loader"></div>
+                </div>
+            </button>
+            <button class="like-btn copy-url"> <i class="fa-solid fa-share copy-url"></i> Share </button>
+        </div>
+    </section>
+    <footer>All copyright reserved by MindScribe</footer>
+</body>
+
+</html>
