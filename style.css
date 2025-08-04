@@ -115,12 +115,8 @@ nav>ul>li {
     cursor: pointer;
     position: relative;
     transition: all 1s;
-<<<<<<< HEAD
     display: none;
-=======
-    /* display: none; */
     text-wrap: nowrap;
->>>>>>> dev
 }
 
 nav>ul>li::before {
@@ -254,6 +250,8 @@ nav>ul>li>a {
 ========================= */
 #our-story {
     padding: 10px;
+    scroll-margin-top: 100px;
+
 }
 
 #our-story>h1 {
@@ -913,6 +911,7 @@ footer {
         overflow: hidden;
         justify-content: left;
         position: relative;
+        scroll-margin-top: 270px;
     }
 
     #logo{

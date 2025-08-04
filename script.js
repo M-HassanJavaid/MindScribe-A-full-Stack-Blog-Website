@@ -71,6 +71,7 @@ let blogInputBtn = document.querySelector('.blog-input-btn');
 let saveBlogDraftBtn = document.querySelector('#save-blog-draft-btn');
 let showPasswordBtn = document.querySelector('.fa-eye');
 let hidePasswordBtn = document.querySelector('.fa-eye-slash');
+let navBar = document.querySelector('nav');
 
 let passwordEye = document.querySelector('#hideOrShowPassowrd');
 
