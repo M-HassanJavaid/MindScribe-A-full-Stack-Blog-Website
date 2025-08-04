@@ -115,7 +115,7 @@ nav>ul>li {
     cursor: pointer;
     position: relative;
     transition: all 1s;
-    /* display: none; */
+    display: none;
 }
 
 nav>ul>li::before {
@@ -356,6 +356,7 @@ form p {
 
 .fa-eye , .fa-eye-slash{
     font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .fa-eye-slash{
@@ -910,6 +911,7 @@ footer {
         flex-direction: column-reverse;
 
     }
+
 
     nav>ul>li::before{
         display: none;

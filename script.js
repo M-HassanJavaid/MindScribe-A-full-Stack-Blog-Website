@@ -27,19 +27,6 @@ const quill = new Quill('#blog-input', {
 
 
 
-const isLoad = {
-    blogs: false,
-    user: false
-}
-
-function checkAndHideLoader() {
-    for (const key in isLoad) {
-        if (!isLoad[key]) return;
-    }
-    hideElem(loaderContainer);
-}
-
-
 // quill.on('text-change', updateUserDraft)
 
 const firebaseConfig = {
@@ -67,11 +54,7 @@ let nameInput = document.querySelector('.full-name');
 let emailInput = document.querySelector('.email');
 let passwordInput = document.querySelector('.password');
 let emailVericationMessageConatiner = document.querySelector('#call-to-verify-email-container');
-let registerBtn = document.querySelector('.register-btn');
-let loginBtn = document.querySelector('.login-btn');
 let loaderContainer = document.querySelector('#loader-container');
-let writeBlogBtn = document.querySelector('.write-blog-btn');
-let logoutNavBtn = document.querySelector('nav .logout-btn');
 let blogInputContainer = document.querySelector('#Blog-input-container');
 let blogTitleInput = document.querySelector('#Blog-title-input');
 let blogDescInput = document.querySelector('#Blog-description-input');
@@ -87,8 +70,17 @@ let adminBlogContainer = document.querySelector('#admin-blog-container');
 let blogInputBtn = document.querySelector('.blog-input-btn');
 let saveBlogDraftBtn = document.querySelector('#save-blog-draft-btn');
 let showPasswordBtn = document.querySelector('.fa-eye');
-let hidePasswordBtn = document.querySelector('.fa-eye-slash')
+let hidePasswordBtn = document.querySelector('.fa-eye-slash');
 
+let passwordEye = document.querySelector('#hideOrShowPassowrd');
+
+
+let registerBtn = document.querySelector('.register-btn');
+let loginBtn = document.querySelector('.login-btn');
+let ourStoryNav = document.querySelector('#our-story-nav');
+let writeBlogBtn = document.querySelector('.write-blog-btn');
+let logoutNavBtn = document.querySelector('nav .logout-btn');
+let adminBlogsBtn = document.querySelector('#view-my-blogs');
 
 
 
@@ -97,8 +89,7 @@ let blogData;
 getBlogsFromDB()
     .then((blog) => {
         blogData = blog;
-        isLoad.blogs = true;
-        checkAndHideLoader()
+        hideElem(loaderContainer)
     })
 
 blogSearchBar.addEventListener('input', () => {
@@ -150,7 +141,8 @@ function openSignupForm() {
     fullNameInput.style.display = 'block'
     formBtn.textContent = 'Register Now';
     formBtn.id = 'signupFormBtn';
-    loginAndSignupSwitch.innerHTML = `Already have an account? <span id="jump-to-login">Login Now</span>`
+    loginAndSignupSwitch.innerHTML = `Already have an account? <span id="jump-to-login">Login Now</span>`;
+    passwordEye.style.top = '165px';
     showFlexElem(formConatiner);
 }
 
@@ -159,6 +151,7 @@ function openLoginForm() {
     loginAndSignupSwitch.innerHTML = `Don't have an account? <span id="jump-to-signup">Register yourself now</span>`;
     formBtn.id = 'loginFormBtn'
     hideElem(fullNameInput)
+    passwordEye.style.top = '105px';
     showFlexElem(formConatiner)
 }
 
@@ -167,18 +160,15 @@ onAuthStateChanged(auth, async (user) => {
         await user.reload();
         if (!user.emailVerified) showFlexElem(emailVericationMessageConatiner)
         hideElem(registerBtn, loginBtn);
-        showBlockElem(writeBlogBtn, logoutNavBtn);
+        showBlockElem(writeBlogBtn, logoutNavBtn , ourStoryNav , adminBlogsBtn);
 
         getBLogOnRoute()
 
 
     } else {
-        showBlockElem(registerBtn, loginBtn);
-        hideElem(emailVericationMessageConatiner, writeBlogBtn, logoutNavBtn);
+        showBlockElem(registerBtn, loginBtn , ourStoryNav);
+        hideElem(emailVericationMessageConatiner, writeBlogBtn, logoutNavBtn , adminBlogsBtn);
     }
-
-    isLoad.user = true;
-    checkAndHideLoader();
 });
 
 async function getLogin(email, password) {
