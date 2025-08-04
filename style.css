@@ -115,7 +115,12 @@ nav>ul>li {
     cursor: pointer;
     position: relative;
     transition: all 1s;
+<<<<<<< HEAD
     display: none;
+=======
+    /* display: none; */
+    text-wrap: nowrap;
+>>>>>>> dev
 }
 
 nav>ul>li::before {
@@ -194,10 +199,11 @@ nav>ul>li>a {
 }
 
 .blog-card-img {
-    width: 300px;
-    height: 300px;
+    width: calc(100% - 20px) ;
+    aspect-ratio: 1/1;
     flex-shrink: 0;
     align-self: center;
+    max-width: 300px;
 }
 
 .blog-card-img img {
@@ -899,15 +905,24 @@ footer {
     #phone-Menu-bar{
         display: block;
     }
-
+    
     nav{
         flex-direction: row-reverse;
         align-items: flex-start;
         height: 70px;
         overflow: hidden;
+        justify-content: left;
+        position: relative;
     }
 
+    #logo{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    
     nav>ul{
+        padding: 10px;
         flex-direction: column-reverse;
 
     }
@@ -919,7 +934,6 @@ footer {
 
     .fa-bars{
         font-size: 2.5rem;
-        margin-top: 5px;
     }
 }
 

@@ -118,7 +118,8 @@ async function Signup(name, email, password) {
 async function verifyEmail() {
     try {
         showFlexElem(loaderContainer)
-        await sendEmailVerification(auth.currentUser, {
+        let user = await waitForUser();
+        await sendEmailVerification(user, {
             url: 'https://mindscribeblog.netlify.app/'
         })
         showAlert("Verification email sent. Please check your inbox or spam box.");
@@ -155,6 +156,23 @@ function openLoginForm() {
     showFlexElem(formConatiner)
 }
 
+function waitForUser() {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+            auth,
+            async (user) => {
+                unsubscribe(); // ✅ Call this only AFTER we get the user
+                if (user) {
+                    await user.reload();
+                    resolve(user);
+                } else {
+                    resolve(null);
+                }
+            });
+    });
+}
+
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         await user.reload();
@@ -169,6 +187,7 @@ onAuthStateChanged(auth, async (user) => {
         showBlockElem(registerBtn, loginBtn , ourStoryNav);
         hideElem(emailVericationMessageConatiner, writeBlogBtn, logoutNavBtn , adminBlogsBtn);
     }
+
 });
 
 async function getLogin(email, password) {
@@ -196,6 +215,8 @@ function isBlogInputValid() {
 }
 
 imgInput.addEventListener('change', uploadBlogImage);
+
+let isNavOpen = false;
 
 document.addEventListener('click', (event) => {
     const target = event.target;
@@ -291,13 +312,17 @@ document.addEventListener('click', (event) => {
     }
 
     if (target.id === 'Start-Writing-main-btn') {
-        if (!auth.currentUser) {
-            showAlert('First Login to your account to start writing.')
-            return;
-        }
+        showFlexElem(loaderContainer)
+        waitForUser()
+        .then((user) => {
+            if (!user) {
+                showAlert('First Login to your account to start writing.')
+            } else{
+                showBlockElem(blogInputContainer)
 
-        showBlockElem(blogInputContainer)
-
+            }
+            hideElem(loaderContainer)    
+        });
         return;
 
     }
@@ -358,13 +383,26 @@ document.addEventListener('click', (event) => {
     if (target.matches('.fa-eye')) {
         passwordInput.type = 'text';
         showBlockElem(hidePasswordBtn);
-        hideElem(showPasswordBtn)
+        hideElem(showPasswordBtn);
+        return;
     }
 
     if (target.matches('.fa-eye-slash')) {
         passwordInput.type = 'password';
         hideElem(hidePasswordBtn);
         showBlockElem(showPasswordBtn);
+        return;
+    }
+
+    if (target.matches('.fa-bars')) {
+        if (isNavOpen) {
+            navBar.style.height = '70px';
+            isNavOpen = false
+        } else {
+            navBar.style.height = 'auto';
+            isNavOpen = true
+        }
+        return;
     }
 });
 
@@ -386,7 +424,9 @@ async function likeBlog() {
         let hash = window.location.hash;
         let BlogId = hash.slice(7, hash.length);
 
-        let userDocRef = doc(db, 'users', auth.currentUser.uid);
+        let user = await waitForUser();
+
+        let userDocRef = doc(db, 'users', user.uid);
         let blogDocRef = doc(db, 'blogs', BlogId)
 
         let userDoc = await getDoc(userDocRef);
@@ -441,7 +481,8 @@ async function likeBlog() {
 async function InsertDraftToBlogInput() {
     try {
         showFlexElem(loaderContainer)
-        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        let user = await waitForUser()
+        const userDocRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(userDocRef);
         if (!docSnap.exists()) throw new Error('')
         let BlogDraft = docSnap.data().BlogDraft;
@@ -482,12 +523,14 @@ async function publishBlog() {
 
         const blogsCollection = collection(db, 'blogs')
 
-        let publisherInfo = await getUserInfo(auth.currentUser.uid);
+        let user = await waitForUser();
+
+        let publisherInfo = await getUserInfo(user.uid);
 
         await addDoc(blogsCollection, {  // create a new document of new blog with auto ID in blogs collection
             blogContent: blogContent,
             publishAt: new Date().toISOString(),
-            publishBy: auth.currentUser.uid,
+            publishBy: user.uid,
             blogTitle: blogTitleInput.value,
             coverImage: blogImageToShow.src,
             publisherName: publisherInfo.name,
@@ -499,7 +542,7 @@ async function publishBlog() {
         showAlert('Your Blog has successfully published!')
         hideElem(blogInputContainer)
 
-        const userDoc = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = doc(db, 'users', user.uid);
 
         await setDoc(userDoc, {
             BlogDraft: {
@@ -543,11 +586,12 @@ async function getLogout() {
 }
 
 async function createUserInDB(email, name) {
-    let newDoc = doc(db, 'users', auth.currentUser.uid);
+    let user = await waitForUser();
+    let newDoc = doc(db, 'users', user.uid);
     let newDocRef = await setDoc(newDoc, {
         email: email,
         name: name,
-        uid: auth.currentUser.uid,
+        uid: user.uid,
         signupAt: new Date().toISOString(),
         BlogDraft: {
             title: '',
@@ -584,7 +628,8 @@ function isInputValid(...inputs) {
 async function updateUserDraft() {
     try {
         showFlexElem(loaderContainer)
-        let userDoc = doc(db, 'users', auth.currentUser.uid);
+        let user = await waitForUser();
+        let userDoc = doc(db, 'users', user.uid);
         await setDoc(userDoc, {
             BlogDraft: {
                 title: blogTitleInput.value,
@@ -725,8 +770,10 @@ function getDisplayDateFormat(iso) {
 async function getBLogOnRoute() {
 
     try {
+        showFlexElem(loaderContainer)
         let blogLikeBtn = document.querySelector('.like-btn');
-        if (!auth.currentUser) hideElem(blogLikeBtn);
+        let user = await waitForUser();
+        if (!user) hideElem(blogLikeBtn);
         let hash = window.location.hash;
         if (!hash.startsWith('#/blog/')) {
             hideElem(blogPage);
@@ -734,7 +781,6 @@ async function getBLogOnRoute() {
         }
 
 
-        showFlexElem(loaderContainer)
 
         let id = hash.slice(7, hash.length);
 
@@ -769,10 +815,11 @@ async function getBLogOnRoute() {
 window.addEventListener('hashchange', getBLogOnRoute);
 
 async function handleLike(id) {
-    if (!auth.currentUser) return
+    let user = await waitForUser();
+    if (!user) return
     let LikeElem = document.querySelector('.fa-thumbs-up');
 
-    let userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+    let userDoc = await getDoc(doc(db, 'users', user.uid));
 
     let yourLikeBLogList = userDoc.data().likeBlogList;
 
@@ -790,7 +837,8 @@ async function getAdminBlogs() {
         let blogsCollection = collection(db, 'blogs');
         let userBlogs = [];
 
-        const queryOfUserBlogs = query(blogsCollection, where("publishBy", "==", auth.currentUser.uid));
+        let user = await waitForUser()
+        const queryOfUserBlogs = query(blogsCollection, where("publishBy", "==", user.uid));
 
         const docsSnap = await getDocs(queryOfUserBlogs);
 
