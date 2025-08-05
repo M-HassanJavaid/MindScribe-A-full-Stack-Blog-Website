@@ -171,7 +171,7 @@ function openLoginForm() {
 
 function waitForUser() {
     return new Promise((resolve, reject) => {
-        if (isOffline) reject('Your are not connected with Interent!')
+        if (isOffline) reject({message : 'Your are not connected with Interent!'})
         const unsubscribe = onAuthStateChanged(
             auth,
             async (user) => {
