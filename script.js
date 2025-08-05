@@ -827,6 +827,7 @@ async function getBLogOnRoute() {
 }
 
 window.addEventListener('hashchange', getBLogOnRoute);
+window.addEventListener('load' , getBLogOnRoute)
 
 async function handleLike(id) {
     let user = await waitForUser();
