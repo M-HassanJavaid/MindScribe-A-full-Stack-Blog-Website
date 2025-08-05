@@ -83,6 +83,16 @@ let writeBlogBtn = document.querySelector('.write-blog-btn');
 let logoutNavBtn = document.querySelector('nav .logout-btn');
 let adminBlogsBtn = document.querySelector('#view-my-blogs');
 
+let isOffline = false;
+window.addEventListener('offline' , ()=>{
+    showAlert('Your connection has lost!')
+    isOffline = true;
+});
+
+window.addEventListener('online', (e)=>{
+   showAlert('Your internet connection has recovered!');
+   isOffline = false;
+});
 
 
 
@@ -93,17 +103,19 @@ getBlogsFromDB()
         hideElem(loaderContainer)
     })
 
-blogSearchBar.addEventListener('input', () => {
-    let searchTerm = blogSearchBar.value.toLowerCase();
-    let filterBlogs = blogData.filter((blog) => (blog.blogTitle.toLowerCase().includes(searchTerm) ||
+  
+    
+    blogSearchBar.addEventListener('input', () => {
+        let searchTerm = blogSearchBar.value.toLowerCase();
+        let filterBlogs = blogData.filter((blog) => (blog.blogTitle.toLowerCase().includes(searchTerm) ||
         blog.blogContent.toLowerCase().includes(searchTerm) ||
         blog.description.toLowerCase().includes(searchTerm)));
-    renderBlogs(filterBlogs);
-});
-
-async function Signup(name, email, password) {
-    try {
-        showFlexElem(loaderContainer)
+        renderBlogs(filterBlogs);
+    });
+    
+    async function Signup(name, email, password) {
+        try {
+            showFlexElem(loaderContainer)
         await createUserWithEmailAndPassword(auth, email, password)
         await createUserInDB(email, name);
         showAlert(`Welcome ${name}, you have sccessfully register!`);
@@ -159,6 +171,7 @@ function openLoginForm() {
 
 function waitForUser() {
     return new Promise((resolve, reject) => {
+        if (isOffline) reject('Your are not connected with Interent!')
         const unsubscribe = onAuthStateChanged(
             auth,
             async (user) => {
