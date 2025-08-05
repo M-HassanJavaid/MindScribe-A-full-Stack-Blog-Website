@@ -84,14 +84,14 @@ let logoutNavBtn = document.querySelector('nav .logout-btn');
 let adminBlogsBtn = document.querySelector('#view-my-blogs');
 
 let isOffline = false;
-window.addEventListener('offline' , ()=>{
+window.addEventListener('offline', () => {
     showAlert('Your connection has lost!')
     isOffline = true;
 });
 
-window.addEventListener('online', (e)=>{
-   showAlert('Your internet connection has recovered!');
-   isOffline = false;
+window.addEventListener('online', (e) => {
+    showAlert('Your internet connection has recovered!');
+    isOffline = false;
 });
 
 
@@ -103,19 +103,19 @@ getBlogsFromDB()
         hideElem(loaderContainer)
     })
 
-  
-    
-    blogSearchBar.addEventListener('input', () => {
-        let searchTerm = blogSearchBar.value.toLowerCase();
-        let filterBlogs = blogData.filter((blog) => (blog.blogTitle.toLowerCase().includes(searchTerm) ||
+
+
+blogSearchBar.addEventListener('input', () => {
+    let searchTerm = blogSearchBar.value.toLowerCase();
+    let filterBlogs = blogData.filter((blog) => (blog.blogTitle.toLowerCase().includes(searchTerm) ||
         blog.blogContent.toLowerCase().includes(searchTerm) ||
         blog.description.toLowerCase().includes(searchTerm)));
-        renderBlogs(filterBlogs);
-    });
-    
-    async function Signup(name, email, password) {
-        try {
-            showFlexElem(loaderContainer)
+    renderBlogs(filterBlogs);
+});
+
+async function Signup(name, email, password) {
+    try {
+        showFlexElem(loaderContainer)
         await createUserWithEmailAndPassword(auth, email, password)
         await createUserInDB(email, name);
         showAlert(`Welcome ${name}, you have sccessfully register!`);
@@ -171,7 +171,7 @@ function openLoginForm() {
 
 function waitForUser() {
     return new Promise((resolve, reject) => {
-        if (isOffline) reject({message : 'Your are not connected with Interent!'})
+        if (isOffline) reject({ message: 'Your are not connected with Interent!' })
         const unsubscribe = onAuthStateChanged(
             auth,
             async (user) => {
@@ -192,14 +192,14 @@ onAuthStateChanged(auth, async (user) => {
         await user.reload();
         if (!user.emailVerified) showFlexElem(emailVericationMessageConatiner)
         hideElem(registerBtn, loginBtn);
-        showBlockElem(writeBlogBtn, logoutNavBtn , ourStoryNav , adminBlogsBtn);
+        showBlockElem(writeBlogBtn, logoutNavBtn, ourStoryNav, adminBlogsBtn);
 
         getBLogOnRoute()
 
 
     } else {
-        showBlockElem(registerBtn, loginBtn , ourStoryNav);
-        hideElem(emailVericationMessageConatiner, writeBlogBtn, logoutNavBtn , adminBlogsBtn);
+        showBlockElem(registerBtn, loginBtn, ourStoryNav);
+        hideElem(emailVericationMessageConatiner, writeBlogBtn, logoutNavBtn, adminBlogsBtn);
     }
 
 });
@@ -328,15 +328,15 @@ document.addEventListener('click', (event) => {
     if (target.id === 'Start-Writing-main-btn') {
         showFlexElem(loaderContainer)
         waitForUser()
-        .then((user) => {
-            if (!user) {
-                showAlert('First Login to your account to start writing.')
-            } else{
-                showBlockElem(blogInputContainer)
+            .then((user) => {
+                if (!user) {
+                    showAlert('First Login to your account to start writing.')
+                } else {
+                    showBlockElem(blogInputContainer)
 
-            }
-            hideElem(loaderContainer)    
-        });
+                }
+                hideElem(loaderContainer)
+            });
         return;
 
     }
@@ -787,7 +787,12 @@ async function getBLogOnRoute() {
         showFlexElem(loaderContainer)
         let blogLikeBtn = document.querySelector('.like-btn');
         let user = await waitForUser();
-        if (!user) hideElem(blogLikeBtn);
+        if (!user) {
+            hideElem(blogLikeBtn);
+        } else {
+            showFlexElem(blogLikeBtn);
+        }
+
         let hash = window.location.hash;
         if (!hash.startsWith('#/blog/')) {
             hideElem(blogPage);
@@ -827,7 +832,7 @@ async function getBLogOnRoute() {
 }
 
 window.addEventListener('hashchange', getBLogOnRoute);
-window.addEventListener('load' , getBLogOnRoute)
+window.addEventListener('load', getBLogOnRoute)
 
 async function handleLike(id) {
     let user = await waitForUser();
