@@ -42,8 +42,6 @@ It provides a complete solution for bloggers to **write, manage, and share** the
 
 ## ⭐ Contribute & Support
 
- If you like this project, please consider giving it a **star** ⭐, **following me** for more updates, and **contributing** to make it even better!
-
  - ⭐ **Star this repo** to show your support
  - 👤 **Follow me** on [GitHub](https://github.com/M-HassanJavaid)
  - 🤝 **Contribute** by submitting issues or pull requests
